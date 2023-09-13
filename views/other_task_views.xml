@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="other_task_view_tree" model="ir.ui.view">
+        <field name="name">other.task.tree</field>
+        <field name="model">logic.task.other</field>
+        <field name="arch" type="xml">
+             <tree>
+                <field name="name"/>
+                <field name="date"/>
+                <field name="task_creator"/>
+                <field name="total_time" widget="float_time"/>
+                <!-- <div class="oe_title">
+                    <h1 class="d-flex">
+                        <field name="name" placeholder="Task Name"/>
+                    </h1>
+                </div> -->
+                
+             </tree>
+        </field>
+    </record>
+
+    <record id="other_task_view_form" model="ir.ui.view">
+        <field name="name">other.task.form</field>
+        <field name="model">logic.task.other</field>
+        <field name="arch" type="xml">
+             <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1 class="d-flex">
+                            <field name="name" placeholder="Task Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="date"/>
+                            <field name="description"/>
+                            <field name="manager" invisible="1"/>
+                            <field name="task_creator"/>
+                            <field name="total_time" widget="float_time"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="other_task_action">
+        <field name="name">Miscellaneous Works</field>
+        <field name="res_model">logic.task.other</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_other_works"
+    name="Miscellaneous Works"
+    action="other_task_action"
+    sequence="10"/>
+</odoo>
