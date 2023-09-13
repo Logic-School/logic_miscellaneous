@@ -53,5 +53,6 @@
     <menuitem id="menu_other_works"
     name="Miscellaneous Works"
     action="other_task_action"
+    web_icon="logic_miscellaneous/static/description/icon.png"
     sequence="10"/>
 </odoo>
