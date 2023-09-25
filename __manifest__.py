@@ -3,7 +3,7 @@
     'author': 'Rizwaan',
     'version': "14.0.1.0",
     'sequence': "0",
-    'depends': ['base'],
+    'depends': ['base','mail'],
     'data': [
         'security/ir.model.access.csv',
         # 'security/groups.xml',
