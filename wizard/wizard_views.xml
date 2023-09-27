@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="other_task_ask_form_view" model="ir.ui.view">
+        <field name="name">Ask Question Form</field>
+        <field name="model">task.other.ask.wizard</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Ask Question">
+                <group>
+                    <group>
+                        <field name="task_id" readonly="1"/>
+
+                        <!-- <field name="payment_request_id"/> -->
+                    </group>
+                    <field name="question" widget="html"/>
+
+                </group>
+                <footer>
+                    <button string="Ask" name="action_head_ask" type="object" help="This will create an activity for asking a question to the task creator" class="oe_highlight"/>
+                    <button string="Cancel" class="btn btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Define the action -->
+    <record id="other_task_ask_wizard" model="ir.actions.act_window">
+        <field name="name">Ask Question</field>
+        <field name="res_model">task.other.ask.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="other_task_ask_form_view"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

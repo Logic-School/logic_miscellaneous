@@ -2,9 +2,11 @@ from odoo import models, fields, api
 from datetime import date
 import logging
 from odoo.exceptions import UserError
+
 class OtherTask(models.Model):
     _name = "logic.task.other"
     _inherit = ['mail.thread', 'mail.activity.mixin']
+    _description = "Miscellaneous Task"
 
     name = fields.Char(string="Name", required=True)
     description = fields.Text(string="Description")
@@ -79,7 +81,12 @@ class OtherTask(models.Model):
         # self.message_post(body=f"Status Changed: {current_status} -> Completed")
         self.state = "completed"
 
-    def action_head_ask(self):
-        self.activity_schedule('logic_miscellaneous.mail_activity_type_misc_task', user_id=self.task_creator.id,
-                               res_id = self.id,
-                               summary=f'Question from {self.task_creator.name}')
+    def action_ask_head(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Ask Question',
+            'res_model': 'task.other.ask.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            # 'context': {'default_action_type':'assign'}
+        }

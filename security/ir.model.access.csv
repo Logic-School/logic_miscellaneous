@@ -1,3 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 
 access_other_works_user,access_other_works_user,model_logic_task_other,base.group_user,1,1,1,1
+access_other_works_ask_wizard,access_other_works_ask_wizard,model_task_other_ask_wizard,base.group_user,1,1,1,1

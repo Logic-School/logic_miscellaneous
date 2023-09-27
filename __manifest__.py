@@ -9,6 +9,7 @@
         # 'security/groups.xml',
         'security/record_rules.xml',
         'views/other_task_views.xml',
+        'wizard/wizard_views.xml',
 
     ],
     'demo': [],
