@@ -5,6 +5,7 @@
     'sequence': "0",
     'depends': ['base','mail'],
     'data': [
+        'data/activity.xml',
         'security/ir.model.access.csv',
         # 'security/groups.xml',
         'security/record_rules.xml',
