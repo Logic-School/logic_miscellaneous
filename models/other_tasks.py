@@ -1,7 +1,7 @@
 from odoo import models, fields, api
 from datetime import date
 import logging
-
+from odoo.exceptions import UserError
 class OtherTask(models.Model):
     _name = "logic.task.other"
     _inherit = ['mail.thread', 'mail.activity.mixin']
@@ -9,7 +9,11 @@ class OtherTask(models.Model):
     name = fields.Char(string="Name", required=True)
     description = fields.Text(string="Description")
     date = fields.Date(string="Date", default=date.today())
-    manager = fields.Many2one('hr.employee',default = lambda self: self.env.user.employee_id.parent_id.id)
+
+    def _compute_manager_id(self):
+        for record in self: 
+            record.manager = record.task_creator_employee.parent_id.id
+    manager = fields.Many2one('hr.employee',compute="_compute_manager_id")
     task_creator = fields.Many2one('res.users',default = lambda self: self.env.user, string="Task Creator",readonly=True)
     task_creator_employee = fields.Many2one('hr.employee',default = lambda self: self.env.user.employee_id.id, string="Task Creator Employee",readonly=True)
     state = fields.Selection(selection=[('draft','Draft'),('in_progress','In Progress'),('hold','On Hold'),('completed','Completed'),('cancel','Cancelled')])
@@ -74,3 +78,8 @@ class OtherTask(models.Model):
 
         # self.message_post(body=f"Status Changed: {current_status} -> Completed")
         self.state = "completed"
+
+    def action_head_ask(self):
+        self.activity_schedule('logic_miscellaneous.mail_activity_type_misc_task', user_id=self.task_creator.id,
+                               res_id = self.id,
+                               summary=f'Question from {self.task_creator.name}')
