@@ -20,6 +20,7 @@ class OtherTask(models.Model):
     task_creator_employee = fields.Many2one('hr.employee',default = lambda self: self.env.user.employee_id.id, string="Task Creator Employee",readonly=True)
     state = fields.Selection(selection=[('draft','Draft'),('in_progress','In Progress'),('hold','On Hold'),('completed','Completed'),('cancel','Cancelled')])
     total_time = fields.Float(string="Time Taken")
+    time_taken_days = fields.Integer(string="Days Taken")
     is_drag = fields.Boolean()
     def _compute_is_creator_head(self):
         for record in self:
