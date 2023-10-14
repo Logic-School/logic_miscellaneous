@@ -8,6 +8,8 @@
                 <field name="name"/>
                 <field name="date"/>
                 <field name="task_creator"/>
+                <field name="time_taken_days"/>
+
                 <field name="total_time" widget="float_time"/>
                 <field string="Status" name="state" decoration-success="state == 'completed'" decoration-info="state == 'hold'" decoration-warning="state == 'in_progress'" decoration-danger="state == 'cancel'" widget="badge"/>
                 <!-- <div class="oe_title">
