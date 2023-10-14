@@ -10,7 +10,7 @@ class OtherTask(models.Model):
 
     name = fields.Char(string="Name", required=True)
     description = fields.Text(string="Description")
-    date = fields.Date(string="Date", default=date.today())
+    date = fields.Date(string="Date", default=fields.Date.today())
 
     def _compute_manager_id(self):
         for record in self: 
@@ -21,6 +21,7 @@ class OtherTask(models.Model):
     state = fields.Selection(selection=[('draft','Draft'),('in_progress','In Progress'),('hold','On Hold'),('completed','Completed'),('cancel','Cancelled')])
     total_time = fields.Float(string="Time Taken")
     time_taken_days = fields.Integer(string="Days Taken")
+
     is_drag = fields.Boolean()
     def _compute_is_creator_head(self):
         for record in self:

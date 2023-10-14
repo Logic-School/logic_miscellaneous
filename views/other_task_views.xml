@@ -9,6 +9,7 @@
                 <field name="date"/>
                 <field name="task_creator"/>
                 <field name="total_time" widget="float_time"/>
+                <field string="Status" name="state" decoration-success="state == 'completed'" decoration-info="state == 'hold'" decoration-warning="state == 'in_progress'" decoration-danger="state == 'cancel'" widget="badge"/>
                 <!-- <div class="oe_title">
                     <h1 class="d-flex">
                         <field name="name" placeholder="Task Name"/>
@@ -109,10 +110,24 @@
             </kanban>
         </field>
     </record>
+
+    <record model="ir.ui.view" id="other_task_graph">
+        <field name="name">other.task.graph</field>
+        <field name="model">logic.task.other</field>
+        <field name="type">graph</field>
+        <field name="arch" type="xml">
+            <graph string="Other Task" type="bar">
+                <field name="task_creator" type="row"/>
+                <field name="state" type="col"/>
+
+            </graph>
+        </field>
+    </record>
+
     <record model="ir.actions.act_window" id="other_task_action">
         <field name="name">Miscellaneous Works</field>
         <field name="res_model">logic.task.other</field>
-        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_mode">kanban,tree,graph,form</field>
     </record>
 
     <menuitem id="menu_other_works"
