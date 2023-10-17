@@ -21,6 +21,7 @@ class OtherTask(models.Model):
     state = fields.Selection(selection=[('draft','Draft'),('in_progress','In Progress'),('hold','On Hold'),('completed','Completed'),('cancel','Cancelled')])
     total_time = fields.Float(string="Time Taken")
     time_taken_days = fields.Integer(string="Days Taken")
+    remarks = fields.Text(string="Remarks")
 
     is_drag = fields.Boolean()
     def _compute_is_creator_head(self):

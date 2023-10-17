@@ -51,6 +51,11 @@
                             <field name="total_time" widget="float_time"/>
                             <field name="is_creator_head" invisible="1"/>
                             <field name="head_rating" widget="priority" attrs="{'readonly':[('is_creator_head','=',False)], 'invisible':[('state','!=','completed')]}"/>
+                            <field name="remarks"/>
+                        </group>
+                        <group>
+                            <field name="remarks"/>
+
                         </group>
                     </group>
                 </sheet>
