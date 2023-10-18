@@ -23,6 +23,11 @@ class OtherTask(models.Model):
     time_taken_days = fields.Integer(string="Days Taken")
     remarks = fields.Text(string="Remarks")
 
+    department = fields.Many2one('hr.department',related='task_creator_employee.department_id',string="Department",store=True)
+    @api.depends("task_creator_employee")
+    def _compute_department(self):
+        for record in self:
+            record.department = record.task_creator_employee.department_id.id
     is_drag = fields.Boolean()
     def _compute_is_creator_head(self):
         for record in self:
