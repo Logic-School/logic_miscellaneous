@@ -24,14 +24,12 @@ class OtherTask(models.Model):
     remarks = fields.Text(string="Remarks")
 
     department = fields.Many2one('hr.department',related='task_creator_employee.department_id',string="Department",store=True)
-    @api.depends("task_creator_employee")
-    def _compute_department(self):
-        for record in self:
-            record.department = record.task_creator_employee.department_id.id
+
+    date_completed = fields.Date(string="Date Completed")
     is_drag = fields.Boolean()
     def _compute_is_creator_head(self):
         for record in self:
-            if record.manager.user_id.id == self.env.user.id:
+            if record.manager.user_id.id == self.env.user.id or record.manager==False:
                 record.is_creator_head = True
             else:
                 record.is_creator_head = False
@@ -49,6 +47,12 @@ class OtherTask(models.Model):
                 new_status = dict(self._fields['state']._description_selection(self.env))[vals['state']]
                 previous_status = dict(self._fields['state']._description_selection(self.env))[self.state]
                 self.message_post(body=f"Status Changed: {previous_status} -> {new_status}")
+                
+                if vals['state'] == 'completed':
+                    vals['date_completed'] = fields.Date.today()
+                else:
+                    vals['date_completed'] = False
+   
         return super(OtherTask,self).write(vals)
 
     
@@ -88,6 +92,7 @@ class OtherTask(models.Model):
 
         # self.message_post(body=f"Status Changed: {current_status} -> Completed")
         self.state = "completed"
+        self.date_completed = fields.Date.today()
 
     def action_ask_head(self):
         return {

@@ -55,6 +55,7 @@
                             <field name="remarks"/>
                         </group>
                         <group>
+                            <field name="date_completed" attrs="{'readonly':[('is_creator_head','=',False)],'invisible':[('date_completed','=',False)]}"/>
                             <field name="remarks"/>
 
                         </group>
