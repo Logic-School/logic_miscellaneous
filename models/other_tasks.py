@@ -30,8 +30,8 @@ class OtherTask(models.Model):
     @api.depends('expected_days','expected_time','time_taken_days','total_time')
     def _compute_expected_completed_difference(self):
         for record in self:
-            expected_time = record.expected_days + record.expected_time
-            taken_time = record.time_taken_days  + record.total_time
+            expected_time = record.expected_days + (record.expected_time/24)
+            taken_time = record.time_taken_days  + (record.total_time/24)
             difference = round(taken_time - expected_time,2)
             record.expected_completed_difference = difference
 
