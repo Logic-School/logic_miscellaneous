@@ -60,8 +60,8 @@
                             <field name="date_completed" attrs="{'invisible':[('date_completed','=',False)]}" readonly="1"/>
                             <field name="expected_completed_difference" invisible="1"/>
                             <field name="expected_completed_status" style="color:red;" attrs="{'invisible':['|',('expected_completed_difference','&lt;',0),'|',('expected_completed_difference','=',0),('state','!=','completed')]}"/>
-                            <field name="expected_completed_status" style="color:green;" attrs="{'invisible':['|',('expected_completed_difference','&gt;',0),'|',('expected_completed_difference','=',0),('state','!=','completed')]}"/>
-                            <field name="expected_completed_status" attrs="{'invisible':['|',('expected_completed_difference','!=',0),('state','!=','completed')]}"/>
+                            <field name="expected_completed_status" style="color:green;" attrs="{'invisible':[('expected_completed_difference','&gt;',0),'|',('expected_completed_difference','!=',0),('state','!=','completed')]}"/>
+                            <!-- <field name="expected_completed_status" attrs="{'invisible':['|',('expected_completed_difference','!=',0),('state','!=','completed')]}"/> -->
 
                             <field name="remarks"/>
 
