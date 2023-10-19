@@ -59,8 +59,8 @@
                             <field name="total_time" widget="float_time" attrs="{'invisible':[('state','!=','completed')]}"/>
                             <field name="date_completed" attrs="{'invisible':[('date_completed','=',False)]}"/>
                             <field name="expected_completed_difference" invisible="1"/>
-                            <field name="expected_completed_status" style="color:red;" attrs="{'invisible':[('expected_completed_difference','&lt;',0)]}"/>
-                            <field name="expected_completed_status" style="color:green;" attrs="{'invisible':[('expected_completed_difference','&gt;',0)]}"/>
+                            <field name="expected_completed_status" style="color:red;" attrs="{'invisible':['|',('expected_completed_difference','&lt;',0),('expected_completed_difference','=',0)]}"/>
+                            <field name="expected_completed_status" style="color:green;" attrs="{'invisible':['|',('expected_completed_difference','&gt;',0),('expected_completed_difference','=',0)]}"/>
                             <field name="expected_completed_status" attrs="{'invisible':[('expected_completed_difference','!=',0)]}"/>
 
                             <field name="remarks"/>
