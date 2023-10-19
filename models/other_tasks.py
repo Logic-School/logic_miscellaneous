@@ -21,8 +21,26 @@ class OtherTask(models.Model):
     state = fields.Selection(selection=[('draft','Draft'),('in_progress','In Progress'),('hold','On Hold'),('completed','Completed'),('cancel','Cancelled')])
     total_time = fields.Float(string="Time Taken")
     time_taken_days = fields.Integer(string="Days Taken")
+    expected_days = fields.Integer(string="Expected Days")
+    expected_time = fields.Float(string="Expected Time")
     remarks = fields.Text(string="Remarks")
+    expected_completed_status = fields.Char(string="On Time Status", compute="_compute_expected_completed_difference")
+    expected_completed_difference = fields.Float(string="Expected Completed Difference",compute="_compute_expected_completed_difference",store=True)
+    
+    @api.depends('expected_days','expected_time','time_taken_days','total_time')
+    def _compute_expected_completed_difference(self):
+        for record in self:
+            expected_time = record.expected_days + record.expected_time
+            taken_time = record.time_taken_days  + record.total_time
+            difference = round(taken_time - expected_time,2)
+            record.expected_completed_difference = difference
 
+            if difference>0:
+                record.expected_completed_status = "Delayed by "+ str(abs(difference)) + " Days"
+            elif difference<0:
+                record.expected_completed_status = "Ahead of Schedule by "+ str(abs(difference)) + " Days"
+            else:
+                record.expected_completed_status = "Completed exactly on expected time"
     department = fields.Many2one('hr.department',related='task_creator_employee.department_id',string="Department",store=True)
 
     date_completed = fields.Date(string="Date Completed")
