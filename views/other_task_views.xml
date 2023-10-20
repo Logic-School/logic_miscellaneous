@@ -48,17 +48,20 @@
                             <field name="description"/>
                             <field name="manager" invisibl="1"/>
                             <field name="task_creator"/>
-                            <field name="expected_days" attrs="{'readonly':[('state','not in',(False,'draft'))]}"/>
-                            <field name="expected_time" widget="float_time" attrs="{'readonly':[('state','not in',(False,'draft'))]}"/>
+                            <field name="expected_days" attrs="{'readonly':[('state','not in',(False,'draft'))]}" invisible="1"/>
+                            <field name="expected_time" widget="float_time" attrs="{'readonly':[('state','not in',(False,'draft'))]}" invisible="1"/>
+                            <field name="expected_completion" attrs="{'readonly':[('state','not in',(False,'draft'))]}"/>
                             <field name="is_creator_head" invisible="1"/>
                             <field name="head_rating" widget="priority" attrs="{'readonly':[('is_creator_head','=',False)], 'invisible':[('state','!=','completed')]}"/>
                             <field name="remarks"/>
                         </group>
                         <group>
-                            <field name="time_taken_days" attrs="{'invisible':[('state','!=','completed')]}"/>
-                            <field name="total_time" widget="float_time" attrs="{'invisible':[('state','!=','completed')]}"/>
-                            <field name="date_completed" attrs="{'invisible':[('date_completed','=',False)]}" readonly="1"/>
-                            <field name="expected_completed_difference" invisible="1"/>
+                            <field name="time_taken_days" attrs="{'invisible':[('state','!=','completed')]}" invisible="1"/>
+                            <field name="total_time" widget="float_time" attrs="{'invisible':[('state','!=','completed')]}" invisible="1"/>
+                            <field name="date_completed" readonly="1" invisible="1"/>
+                            <field name="completion_datetime" attrs="{'invisible':[('completion_datetime','=',False)]}" readonly="1"/>
+
+                            <field name="expected_completed_difference" invisible="0"/>
                             <field name="expected_completed_status" style="color:red;" attrs="{'invisible':['|',('expected_completed_difference','&lt;',0),'|',('expected_completed_difference','=',0),('state','!=','completed')]}"/>
                             <field name="expected_completed_status" style="color:green;" attrs="{'invisible':[('expected_completed_difference','&gt;',0),'|',('expected_completed_difference','!=',0),('state','!=','completed')]}"/>
                             <!-- <field name="expected_completed_status" attrs="{'invisible':['|',('expected_completed_difference','!=',0),('state','!=','completed')]}"/> -->

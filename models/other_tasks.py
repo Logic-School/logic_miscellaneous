@@ -23,24 +23,36 @@ class OtherTask(models.Model):
     time_taken_days = fields.Integer(string="Days Taken")
     expected_days = fields.Integer(string="Expected Days")
     expected_time = fields.Float(string="Expected Time")
+    expected_completion = fields.Datetime(string="Expected Completion")
     remarks = fields.Text(string="Remarks")
     expected_completed_status = fields.Char(string="On Time Status", compute="_compute_expected_completed_difference")
-    expected_completed_difference = fields.Float(string="Expected Completed Difference",compute="_compute_expected_completed_difference",store=True)
+    expected_completed_difference = fields.Float(string="Time Difference",compute="_compute_expected_completed_difference",store=True,digits=(12,4))
+    completion_datetime = fields.Datetime(string="Completed On")
     
-    @api.depends('expected_days','expected_time','time_taken_days','total_time')
+    @api.depends('completion_datetime','expected_completion')
     def _compute_expected_completed_difference(self):
+        logger = logging.getLogger("Debugger: ")
         for record in self:
-            expected_time = record.expected_days + (record.expected_time/24)
-            taken_time = record.time_taken_days  + (record.total_time/24)
-            difference = round(taken_time - expected_time,2)
-            record.expected_completed_difference = difference
+            # expected_time = record.expected_days + (record.expected_time/24)
+            # taken_time = record.time_taken_days  + (record.total_time/24)
+            if record.completion_datetime and record.expected_completion:
 
-            if difference>0:
-                record.expected_completed_status = "Delayed by "+ str(abs(difference)) + " Days"
-            elif difference<0:
-                record.expected_completed_status = "Ahead of Schedule by "+ str(abs(difference)) + " Days"
+                difference = record.completion_datetime - record.expected_completion
+                days_difference, hours_difference, minutes_difference = abs(difference.days), abs(difference.seconds // 3600), abs(difference.seconds // 60 % 60)
+                record.expected_completed_difference = days_difference + (hours_difference/24) + (minutes_difference/1440)
+                logger.error("days:"+str(days_difference)+ " hrs: "+str(hours_difference)+ "mins: "+ str(minutes_difference))
+                if record.completion_datetime>record.expected_completion:
+                    record.expected_completed_status = "Delayed by "+ str(days_difference) + " Days, " + str(hours_difference) + " Hours, and " + str(minutes_difference) + " Minutes"
+                    record.expected_completed_difference = abs(record.expected_completed_difference)
+
+                elif record.completion_datetime<record.expected_completion:
+                    record.expected_completed_status = "Ahead of schedule by "+ str(abs(days_difference)) + " Days, " + str(abs(hours_difference)) + " Hours, and " + str(abs(minutes_difference)) + " Minutes"
+                    record.expected_completed_difference = - abs(record.expected_completed_difference)
+
+                else:
+                    record.expected_completed_status = "Completed exactly on expected time"
             else:
-                record.expected_completed_status = "Completed exactly on expected time"
+                record.expected_completed_status = ''
     department = fields.Many2one('hr.department',related='task_creator_employee.department_id',string="Department",store=True)
 
     date_completed = fields.Date(string="Date Completed")
@@ -53,6 +65,12 @@ class OtherTask(models.Model):
                 record.is_creator_head = False
     is_creator_head = fields.Boolean(compute="_compute_is_creator_head")
     head_rating = fields.Selection(selection=[('0','No rating'),('1','Very Poor'),('2','Poor'),('3','Average'),('4','Good'),('5','Very Good')], string="Head Rating", default='0')
+
+    @api.onchange('expected_completion')
+    def on_expected_completion(self):
+        if self.expected_completion:
+            self.expected_completion = self.expected_completion.replace(second=0, microsecond=0)
+
 
     @api.model
     def create(self,vals):
@@ -111,6 +129,7 @@ class OtherTask(models.Model):
         # self.message_post(body=f"Status Changed: {current_status} -> Completed")
         self.state = "completed"
         self.date_completed = fields.Date.today()
+        self.completion_datetime = (fields.Datetime.now()).replace(second=0,microsecond=0)
 
     def action_ask_head(self):
         return {
