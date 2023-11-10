@@ -37,7 +37,11 @@ class OtherTask(models.Model):
             # taken_time = record.time_taken_days  + (record.total_time/24)
             if record.completion_datetime and record.expected_completion:
 
-                difference = record.completion_datetime - record.expected_completion
+                if record.completion_datetime>record.expected_completion:
+                    difference = record.completion_datetime - record.expected_completion
+                else:
+                    difference = record.expected_completion - record.completion_datetime
+
                 days_difference, hours_difference, minutes_difference = abs(difference.days), abs(difference.seconds // 3600), abs(difference.seconds // 60 % 60)
                 record.expected_completed_difference = days_difference + (hours_difference/24) + (minutes_difference/1440)
                 logger.error("days:"+str(days_difference)+ " hrs: "+str(hours_difference)+ "mins: "+ str(minutes_difference))
