@@ -29,10 +29,40 @@ class OtherTask(models.Model):
     expected_completed_difference = fields.Float(string="Time Difference",compute="_compute_expected_completed_difference",store=True,digits=(12,4))
     completion_datetime = fields.Datetime(string="Completed On")
     
+    def action_change_on_time_status_all(self):
+        records = self.env['logic.task.other'].sudo().search([])
+        for record in records:
+            # expected_time = record.expected_days + (record.expected_time/24)
+            # taken_time = record.time_taken_days  + (record.total_time/24)
+            if record.completion_datetime and record.expected_completion:
+
+                if record.completion_datetime>record.expected_completion:
+                    difference = record.completion_datetime - record.expected_completion
+                else:
+                    difference = record.expected_completion - record.completion_datetime
+
+                days_difference, hours_difference, minutes_difference = abs(difference.days), abs(difference.seconds // 3600), abs(difference.seconds // 60 % 60)
+                record.expected_completed_difference = days_difference + (hours_difference/24) + (minutes_difference/1440)
+                if record.completion_datetime>record.expected_completion:
+                    record.expected_completed_status = "Delayed by "+ str(days_difference) + " Days, " + str(hours_difference) + " Hours, and " + str(minutes_difference) + " Minutes"
+                    record.expected_completed_difference = abs(record.expected_completed_difference)
+
+                elif record.completion_datetime<record.expected_completion:
+                    record.expected_completed_status = "Ahead of schedule by "+ str(abs(days_difference)) + " Days, " + str(abs(hours_difference)) + " Hours, and " + str(abs(minutes_difference)) + " Minutes"
+                    record.expected_completed_difference = - abs(record.expected_completed_difference)
+
+                else:
+                    record.expected_completed_status = "Completed exactly on expected time"
+            else:
+                record.expected_completed_status = ''
+
     @api.depends('completion_datetime','expected_completion')
     def _compute_expected_completed_difference(self):
         logger = logging.getLogger("Debugger: ")
         for record in self:
+            record.expected_completed_status = False
+            record.expected_completed_difference = False
+
             # expected_time = record.expected_days + (record.expected_time/24)
             # taken_time = record.time_taken_days  + (record.total_time/24)
             if record.completion_datetime and record.expected_completion:

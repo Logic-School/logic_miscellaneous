@@ -154,4 +154,14 @@
         action="other_task_action"
         web_icon="logic_miscellaneous/static/description/icon.png"
         sequence="10"/>
+
+
+    <record model="ir.actions.server" id="change_one_time_status_misc">
+        <field name="name">Change Time Difference and One Time Status</field>
+        <field name="model_id" ref="model_logic_task_other"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = model.action_change_on_time_status_all()
+        </field>
+    </record>
 </odoo>
