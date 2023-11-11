@@ -10,7 +10,7 @@ class OtherTask(models.Model):
 
     name = fields.Char(string="Name", required=True)
     description = fields.Text(string="Description")
-    date = fields.Date(string="Date", default=fields.Date.today())
+    date = fields.Date(string="Date", default=lambda self: fields.Date.context_today(self))
 
     def _compute_manager_id(self):
         for record in self: 
@@ -119,7 +119,7 @@ class OtherTask(models.Model):
                 self.message_post(body=f"Status Changed: {previous_status} -> {new_status}")
                 
                 if vals['state'] == 'completed':
-                    vals['date_completed'] = fields.Date.today()
+                    vals['date_completed'] = fields.Date.context_today(self)
                 else:
                     vals['date_completed'] = False
    
@@ -162,7 +162,7 @@ class OtherTask(models.Model):
 
         # self.message_post(body=f"Status Changed: {current_status} -> Completed")
         self.state = "completed"
-        self.date_completed = fields.Date.today()
+        self.date_completed = fields.Date.context_today(self)
         self.completion_datetime = (fields.Datetime.now()).replace(second=0,microsecond=0)
 
     def action_ask_head(self):
