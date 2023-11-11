@@ -6,5 +6,10 @@
             <field name="res_model_id" ref="logic_miscellaneous.model_logic_task_other"/>
             <!-- <field name="delay_count">30</field> -->
         </record>
+        <record id="mail_activity_type_misc_task_delayed" model="mail.activity.type">
+            <field name="name">Miscellaneous Task Delayed</field>
+            <field name="res_model_id" ref="logic_miscellaneous.model_logic_task_other"/>
+            <!-- <field name="delay_count">30</field> -->
+        </record>
     </data>
 </odoo>

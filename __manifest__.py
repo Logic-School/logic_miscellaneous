@@ -6,6 +6,7 @@
     'depends': ['base','mail','hr'],
     'data': [
         'data/activity.xml',
+        'data/scheduled_actions.xml',
         'security/groups.xml',
         'security/ir.model.access.csv',
         'security/record_rules.xml',

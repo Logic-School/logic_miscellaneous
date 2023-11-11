@@ -28,6 +28,8 @@ class OtherTask(models.Model):
     expected_completed_status = fields.Char(string="On Time Status", compute="_compute_expected_completed_difference")
     expected_completed_difference = fields.Float(string="Time Difference",compute="_compute_expected_completed_difference",store=True,digits=(12,4))
     completion_datetime = fields.Datetime(string="Completed On")
+    delayed_activity_send = fields.Boolean(string="Activty Send to Manager for Delay")
+    delay_approved = fields.Boolean(string="Delay Approved")
     
     def action_change_on_time_status_all(self):
         records = self.env['logic.task.other'].sudo().search([])
@@ -134,7 +136,23 @@ class OtherTask(models.Model):
     #     previous_status = dict(self._fields['state']._description_selection(self.env))[previous_state]
     #     new_status = dict(self._fields['state']._description_selection(self.env))[self.state]
     #     self.message_post(body=f"Status Changed: {previous_status} -> {new_status}")
+    def check_task_delayed(self):
+        tasks = self.env['logic.task.other'].sudo().search([('state','=','completed'),('expected_completion','!=',False),('completion_datetime','!=',False),('delayed_activity_send','=',False)])
+        for task in tasks:
+            if task.expected_completion < task.completion_datetime:
+                task.activity_schedule('logic_miscellaneous.mail_activity_type_misc_task_delayed', user_id=task.task_creator.employee_id.parent_id.user_id.id,
+                    summary=f'To Approve: Delayed Task by {task.task_creator.name}')
+                task.write({
+                    'delayed_activity_send': True
+                })
+                
 
+
+    def action_approve_delay(self):
+        delayed_activity = self.activity_ids.filtered(lambda activity: activity.activity_type_id.name=="Miscellaneous Task Delayed")
+        delayed_activity.unlink()
+        self.message_post(body=f"Task Delay Approved by Manager")
+        self.delay_approved = True
     def action_in_progress(self):
         # current_status = dict(self._fields['state']._description_selection(self.env))[self.state]
 

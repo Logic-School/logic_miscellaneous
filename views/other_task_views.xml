@@ -8,9 +8,8 @@
                 <field name="name"/>
                 <field name="date"/>
                 <field name="task_creator"/>
-                <field name="time_taken_days"/>
-
-                <field name="total_time" widget="float_time"/>
+                <field name="expected_completion"/>
+                <field name="completion_datetime"/>
                 <field string="Status" name="state" decoration-success="state == 'completed'" decoration-info="state == 'hold'" decoration-warning="state == 'in_progress'" decoration-danger="state == 'cancel'" widget="badge"/>
                 <!-- <div class="oe_title">
                     <h1 class="d-flex">
@@ -32,6 +31,7 @@
                     <button name="action_complete" string="Set as Completed" help="Click here to set status to complted" type="object" class="oe_highlight" attrs="{'invisible':[('state','not in',('in_progress','hold'))]}"/>
                     <button name="action_hold" string="On Hold" help="Click here to set status to on hold" type="object" class="oe_highlight" attrs="{'invisible':[('state','not in',('in_progress'))]}"/>
                     <button name="action_ask_head" string="Ask Question" help="This will create an activity for asking a question to the task creator" type="object" class="oe_highlight" attrs="{'invisible':['|',('state','not in',('in_progress','completed','hold')),('is_creator_head','=',False)]}"/>
+                    <button name="action_approve_delay" string="Approve Delay" help="Click here to approve task delay" type="object" class="oe_highlight" attrs="{'invisible':['|',('state','!=','completed'),'|',('delay_approved','=',True),('expected_completed_difference','&lt;=',0)]}"/>
 
                     <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,completed,hold"/>
                 </header>
@@ -65,7 +65,7 @@
                             <field name="expected_completed_status" style="color:red;" attrs="{'invisible':['|',('expected_completed_difference','&lt;',0),'|',('expected_completed_difference','=',0),('state','!=','completed')]}"/>
                             <field name="expected_completed_status" style="color:green;" attrs="{'invisible':[('expected_completed_difference','&gt;',0),'|',('expected_completed_difference','!=',0),('state','!=','completed')]}"/>
                             <!-- <field name="expected_completed_status" attrs="{'invisible':['|',('expected_completed_difference','!=',0),('state','!=','completed')]}"/> -->
-
+                            <field name="delay_approved" attrs="{'invisible':['|',('state','not in',('completed')),('expected_completed_difference','&lt;',0)]}" readonly="1"/>
                             <field name="remarks"/>
 
                         </group>
