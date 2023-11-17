@@ -5,12 +5,15 @@
         <field name="model">logic.task.other</field>
         <field name="arch" type="xml">
              <tree>
-                <field name="name"/>
-                <field name="date"/>
-                <field name="task_creator"/>
-                <field name="expected_completion"/>
-                <field name="completion_datetime"/>
-                <field string="Status" name="state" decoration-success="state == 'completed'" decoration-info="state == 'hold'" decoration-warning="state == 'in_progress'" decoration-danger="state == 'cancel'" widget="badge"/>
+                <field name="name" readonly="1"/>
+                <field name="date" readonly="1"/>
+                <field name="task_creator" readonly="1"/>
+                <field name="expected_completion" readonly="1"/>
+                <field name="completion_datetime" readonly="1"/>
+                <field name="is_creator_head" invisible="1"/>
+                <field name="head_rating" widget="priority" attrs="{'readonly':[('is_creator_head','=',False)], 'invisible':[('state','!=','completed')]}"/>
+                <field string="Status" name="state" decoration-success="state == 'completed'" decoration-info="state == 'hold'" decoration-warning="state == 'in_progress'" decoration-danger="state == 'cancel'" readonly="1" widget="badge"/>
+                <field name="task_submission_status" decoration-success="task_submission_status == 'on_time'" decoration-warning="task_submission_status == 'delayed'"/>
                 <!-- <div class="oe_title">
                     <h1 class="d-flex">
                         <field name="name" placeholder="Task Name"/>

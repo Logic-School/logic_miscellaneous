@@ -30,7 +30,7 @@ class OtherTask(models.Model):
     completion_datetime = fields.Datetime(string="Completed On")
     delayed_activity_send = fields.Boolean(string="Activty Send to Manager for Delay")
     delay_approved = fields.Boolean(string="Delay Approved")
-    
+    task_submission_status = fields.Selection(compute="_compute_task_submission_status", string="Submission Status" ,selection=[('on_time','On Time'),('delayed','Delayed')])
     def action_change_on_time_status_all(self):
         records = self.env['logic.task.other'].sudo().search([])
         for record in records:
@@ -57,6 +57,16 @@ class OtherTask(models.Model):
                     record.expected_completed_status = "Completed exactly on expected time"
             else:
                 record.expected_completed_status = ''
+
+    def _compute_task_submission_status(self):
+        for record in self:
+            record.task_submission_status = ''
+            if record.completion_datetime and record.expected_completion:
+                if record.completion_datetime<=record.expected_completion:
+                    record.task_submission_status = 'on_time'
+                else:
+                    record.task_submission_status = 'delayed'
+
 
     @api.depends('completion_datetime','expected_completion')
     def _compute_expected_completed_difference(self):
@@ -95,7 +105,7 @@ class OtherTask(models.Model):
     is_drag = fields.Boolean()
     def _compute_is_creator_head(self):
         for record in self:
-            if record.manager.user_id.id == self.env.user.id or record.manager==False:
+            if record.task_creator_employee.parent_id.user_id.id == self.env.user.id or record.task_creator_employee.parent_id.user_id.id==False:
                 record.is_creator_head = True
             else:
                 record.is_creator_head = False
