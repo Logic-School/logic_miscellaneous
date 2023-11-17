@@ -133,6 +133,19 @@
         </field>
     </record>
 
+    <record id="other_tasks_search" model="ir.ui.view">
+        <field name="name">other.task.search</field>
+        <field name="model">logic.task.other</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="expected_completed_difference"/>
+                <filter string="On Time" name="on_time" domain="[('state','=','completed'),('expected_completed_difference','&lt;=',0)]"/>
+                <filter string="Delayed" name="delayed" domain="[('state','=','completed'),('expected_completed_difference','>',0)]"/>
+
+            </search>
+        </field>
+    </record>
+
     <record model="ir.ui.view" id="other_task_graph">
         <field name="name">other.task.graph</field>
         <field name="model">logic.task.other</field>

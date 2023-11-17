@@ -31,6 +31,7 @@ class OtherTask(models.Model):
     delayed_activity_send = fields.Boolean(string="Activty Send to Manager for Delay")
     delay_approved = fields.Boolean(string="Delay Approved")
     task_submission_status = fields.Selection(compute="_compute_task_submission_status", string="Submission Status" ,selection=[('on_time','On Time'),('delayed','Delayed')])
+    
     def action_change_on_time_status_all(self):
         records = self.env['logic.task.other'].sudo().search([])
         for record in records:
