@@ -30,7 +30,7 @@ class OtherTask(models.Model):
     completion_datetime = fields.Datetime(string="Completed On")
     delayed_activity_send = fields.Boolean(string="Activty Send to Manager for Delay")
     delay_approved = fields.Boolean(string="Delay Approved")
-    task_submission_status = fields.Selection(compute="_compute_task_submission_status", string="Submission Status" ,selection=[('on_time','On Time'),('delayed','Delayed')])
+    task_submission_status = fields.Selection(compute="_compute_task_submission_status", string="Submission Status" ,selection=[('on_time','On Time'),('delayed','Delayed'),('delayed_approved','Delayed (Approved By Head)')],)
     
     def action_change_on_time_status_all(self):
         records = self.env['logic.task.other'].sudo().search([])
@@ -66,7 +66,10 @@ class OtherTask(models.Model):
                 if record.completion_datetime<=record.expected_completion:
                     record.task_submission_status = 'on_time'
                 else:
-                    record.task_submission_status = 'delayed'
+                    if record.delay_approved:
+                        record.task_submission_status = 'delayed_approved'
+                    else:
+                        record.task_submission_status = 'delayed'
 
 
     @api.depends('completion_datetime','expected_completion')

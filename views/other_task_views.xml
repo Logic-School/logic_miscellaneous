@@ -13,7 +13,7 @@
                 <field name="is_creator_head" invisible="1"/>
                 <field name="head_rating" widget="priority" attrs="{'readonly':[('is_creator_head','=',False)], 'invisible':[('state','!=','completed')]}"/>
                 <field string="Status" name="state" decoration-success="state == 'completed'" decoration-info="state == 'hold'" decoration-warning="state == 'in_progress'" decoration-danger="state == 'cancel'" readonly="1" widget="badge"/>
-                <field name="task_submission_status" decoration-success="task_submission_status == 'on_time'" decoration-warning="task_submission_status == 'delayed'"/>
+                <field name="task_submission_status" decoration-success="task_submission_status == 'on_time'" decoration-warning="task_submission_status == 'delayed'" decoration-info="task_submission_status == 'delayed_approved'"/>
                 <!-- <div class="oe_title">
                     <h1 class="d-flex">
                         <field name="name" placeholder="Task Name"/>
