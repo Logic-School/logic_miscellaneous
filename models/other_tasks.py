@@ -116,6 +116,11 @@ class OtherTask(models.Model):
     is_creator_head = fields.Boolean(compute="_compute_is_creator_head")
     head_rating = fields.Selection(selection=[('0','No rating'),('1','Very Poor'),('2','Poor'),('3','Average'),('4','Good'),('5','Very Good')], string="Head Rating", default='0')
 
+    def _compute_is_hr_manager(self):
+        for record in self:
+            record.is_hr_manager = self.env.user.has_group('logic_miscellaneous.group_logic_other_task_hr_manager')
+
+    is_hr_manager = fields.Boolean(compute="_compute_is_hr_manager")
     @api.onchange('expected_completion')
     def on_expected_completion(self):
         if self.expected_completion:
