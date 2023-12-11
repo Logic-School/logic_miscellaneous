@@ -35,7 +35,7 @@
                     <button name="action_complete" string="Set as Completed" help="Click here to set status to complted" type="object" class="oe_highlight" attrs="{'invisible':[('state','not in',('in_progress','hold'))]}"/>
                     <button name="action_hold" string="On Hold" help="Click here to set status to on hold" type="object" class="oe_highlight" attrs="{'invisible':[('state','not in',('in_progress'))]}"/>
                     <button name="action_ask_head" string="Ask Question" help="This will create an activity for asking a question to the task creator" type="object" class="oe_highlight" attrs="{'invisible':['|',('state','not in',('in_progress','completed','hold')),('is_creator_head','=',False)]}"/>
-                    <button name="action_approve_delay" string="Approve Delay" help="Click here to approve task delay" type="object" class="oe_highlight" attrs="{'invisible':['|',('state','!=','completed'),'|',('delay_approved','=',True),('expected_completed_difference','&lt;=',0)]}"/>
+                    <button name="action_approve_delay" string="Approve Delay" help="Click here to approve task delay" type="object" class="oe_highlight" attrs="{'invisible':['|',('state','!=','completed'),'|',('is_creator_head','=',False),'|',('delay_approved','=',True),('expected_completed_difference','&lt;=',0)]}"/>
 
                     <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,completed,hold"/>
                 </header>
