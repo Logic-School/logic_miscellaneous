@@ -139,6 +139,16 @@
                                     <field name="date"/>
                                     <br/>
                                 </span>
+<!--                                <span>-->
+<!--                                    <b>Creator :</b>-->
+<!--                                    <field name="task_creator"/>-->
+<!--                                    <br/>-->
+<!--                                </span>-->
+                                <span>
+<!--                                    <b>Tags :</b>-->
+                                    <field name="tags_id" widget="many2many_tags"/>
+
+                                </span>
                                 <span>
                                     <b>Days Taken:</b>
                                     <field name="time_taken_days"/>

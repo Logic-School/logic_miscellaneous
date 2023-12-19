@@ -16,7 +16,6 @@ class OtherTask(models.Model):
     date = fields.Date(string="Date", default=date.today())
     tags_id = fields.Many2many('project.tags', string="Tags")
 
-
     def _compute_manager_id(self):
         for record in self: 
             record.manager = record.task_creator_employee.parent_id.id
