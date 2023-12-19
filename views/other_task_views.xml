@@ -4,7 +4,7 @@
         <field name="name">other.task.tree</field>
         <field name="model">logic.task.other</field>
         <field name="arch" type="xml">
-             <tree>
+            <tree>
                 <field name="name" readonly="1"/>
                 <field name="date" readonly="1"/>
                 <field name="task_creator" readonly="1"/>
@@ -12,16 +12,21 @@
                 <field name="completion_datetime" readonly="1"/>
                 <field name="is_creator_head" invisible="1"/>
                 <field name="is_hr_manager" invisible="1"/>
-                <field name="head_rating" widget="priority" attrs="{'readonly':[('is_creator_head','=',False)], 'invisible':['|',('state','!=','completed'),'&amp;',('is_hr_manager','=',False),('is_creator_head','=',False)]}"/>
-                <field string="Status" name="state" decoration-success="state == 'completed'" decoration-info="state == 'hold'" decoration-warning="state == 'in_progress'" decoration-danger="state == 'cancel'" readonly="1" widget="badge"/>
-                <field name="task_submission_status" decoration-success="task_submission_status == 'on_time'" decoration-warning="task_submission_status == 'delayed'" decoration-info="task_submission_status == 'delayed_approved'"/>
+                <field name="head_rating" widget="priority"
+                       attrs="{'readonly':[('is_creator_head','=',False)], 'invisible':['|',('state','!=','completed'),'&amp;',('is_hr_manager','=',False),('is_creator_head','=',False)]}"/>
+                <field string="Status" name="state" decoration-success="state == 'completed'"
+                       decoration-info="state == 'hold'" decoration-warning="state == 'in_progress'"
+                       decoration-danger="state == 'cancel'" readonly="1" widget="badge"/>
+                <field name="task_submission_status" decoration-success="task_submission_status == 'on_time'"
+                       decoration-warning="task_submission_status == 'delayed'"
+                       decoration-info="task_submission_status == 'delayed_approved'"/>
                 <!-- <div class="oe_title">
                     <h1 class="d-flex">
                         <field name="name" placeholder="Task Name"/>
                     </h1>
                 </div> -->
-                
-             </tree>
+
+            </tree>
         </field>
     </record>
 
@@ -29,13 +34,23 @@
         <field name="name">other.task.form</field>
         <field name="model">logic.task.other</field>
         <field name="arch" type="xml">
-             <form>
+            <form>
                 <header>
-                    <button name="action_in_progress" string="In Progress" help="Click here to set status to in progress" type="object" class="oe_highlight" attrs="{'invisible':[('state','not in',('draft','hold'))]}"/>
-                    <button name="action_complete" string="Set as Completed" help="Click here to set status to complted" type="object" class="oe_highlight" attrs="{'invisible':[('state','not in',('in_progress','hold'))]}"/>
-                    <button name="action_hold" string="On Hold" help="Click here to set status to on hold" type="object" class="oe_highlight" attrs="{'invisible':[('state','not in',('in_progress'))]}"/>
-                    <button name="action_ask_head" string="Ask Question" help="This will create an activity for asking a question to the task creator" type="object" class="oe_highlight" attrs="{'invisible':['|',('state','not in',('in_progress','completed','hold')),('is_creator_head','=',False)]}"/>
-                    <button name="action_approve_delay" string="Approve Delay" help="Click here to approve task delay" type="object" class="oe_highlight" attrs="{'invisible':['|',('state','!=','completed'),'|',('is_creator_head','=',False),'|',('delay_approved','=',True),('expected_completed_difference','&lt;=',0)]}"/>
+                    <button name="action_in_progress" string="In Progress"
+                            help="Click here to set status to in progress" type="object" class="oe_highlight"
+                            attrs="{'invisible':[('state','not in',('draft','hold'))]}"/>
+                    <button name="action_complete" string="Set as Completed" help="Click here to set status to complted"
+                            type="object" class="oe_highlight"
+                            attrs="{'invisible':[('state','not in',('in_progress','hold'))]}"/>
+                    <button name="action_hold" string="On Hold" help="Click here to set status to on hold" type="object"
+                            class="oe_highlight" attrs="{'invisible':[('state','not in',('in_progress'))]}"/>
+                    <button name="action_ask_head" string="Ask Question"
+                            help="This will create an activity for asking a question to the task creator" type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible':['|',('state','not in',('in_progress','completed','hold')),('is_creator_head','=',False)]}"/>
+                    <button name="action_approve_delay" string="Approve Delay" help="Click here to approve task delay"
+                            type="object" class="oe_highlight"
+                            attrs="{'invisible':['|',('state','!=','completed'),'|',('is_creator_head','=',False),'|',('delay_approved','=',True),('expected_completed_difference','&lt;=',0)]}"/>
 
                     <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,completed,hold"/>
                 </header>
@@ -49,28 +64,40 @@
                         <group>
                             <field name="department"/>
                             <field name="date"/>
+                            <field name="tags_id" widget="many2many_tags"/>
                             <field name="description"/>
                             <field name="manager" invisibl="1"/>
                             <field name="task_creator"/>
-                            <field name="expected_days" attrs="{'readonly':[('state','not in',(False,'draft'))]}" invisible="1"/>
-                            <field name="expected_time" widget="float_time" attrs="{'readonly':[('state','not in',(False,'draft'))]}" invisible="1"/>
-                            <field name="expected_completion" attrs="{'readonly':[('state','not in',(False,'draft'))]}"/>
+                            <field name="expected_days" attrs="{'readonly':[('state','not in',(False,'draft'))]}"
+                                   invisible="1"/>
+                            <field name="expected_time" widget="float_time"
+                                   attrs="{'readonly':[('state','not in',(False,'draft'))]}" invisible="1"/>
+                            <field name="expected_completion"
+                                   attrs="{'readonly':[('state','not in',(False,'draft'))]}"/>
                             <field name="is_creator_head" invisible="1"/>
                             <field name="is_hr_manager" invisible="1"/>
-                            <field name="head_rating" widget="priority" attrs="{'readonly':[('is_creator_head','=',False)], 'invisible':['|',('state','!=','completed'),'&amp;',('is_creator_head','=',False),('is_hr_manager','=',False)]}"/>
+                            <field name="head_rating" widget="priority"
+                                   attrs="{'readonly':[('is_creator_head','=',False)], 'invisible':['|',('state','!=','completed'),'&amp;',('is_creator_head','=',False),('is_hr_manager','=',False)]}"/>
                             <field name="remarks"/>
                         </group>
                         <group>
-                            <field name="time_taken_days" attrs="{'invisible':[('state','!=','completed')]}" invisible="1"/>
-                            <field name="total_time" widget="float_time" attrs="{'invisible':[('state','!=','completed')]}" invisible="1"/>
+                            <field name="time_taken_days" attrs="{'invisible':[('state','!=','completed')]}"
+                                   invisible="1"/>
+                            <field name="total_time" widget="float_time"
+                                   attrs="{'invisible':[('state','!=','completed')]}" invisible="1"/>
                             <field name="date_completed" readonly="1" invisible="1"/>
-                            <field name="completion_datetime" attrs="{'invisible':[('completion_datetime','=',False)]}" readonly="1"/>
+                            <field name="completion_datetime" attrs="{'invisible':[('completion_datetime','=',False)]}"
+                                   readonly="1"/>
 
                             <field name="expected_completed_difference" invisible="0"/>
-                            <field name="expected_completed_status" style="color:red;" attrs="{'invisible':['|',('expected_completed_difference','&lt;',0),'|',('expected_completed_difference','=',0),('state','!=','completed')]}"/>
-                            <field name="expected_completed_status" style="color:green;" attrs="{'invisible':[('expected_completed_difference','&gt;',0),'|',('expected_completed_difference','!=',0),('state','!=','completed')]}"/>
+                            <field name="expected_completed_status" style="color:red;"
+                                   attrs="{'invisible':['|',('expected_completed_difference','&lt;',0),'|',('expected_completed_difference','=',0),('state','!=','completed')]}"/>
+                            <field name="expected_completed_status" style="color:green;"
+                                   attrs="{'invisible':[('expected_completed_difference','&gt;',0),'|',('expected_completed_difference','!=',0),('state','!=','completed')]}"/>
                             <!-- <field name="expected_completed_status" attrs="{'invisible':['|',('expected_completed_difference','!=',0),('state','!=','completed')]}"/> -->
-                            <field name="delay_approved" attrs="{'invisible':['|',('state','not in',('completed')),('expected_completed_difference','&lt;',0)]}" readonly="1"/>
+                            <field name="delay_approved"
+                                   attrs="{'invisible':['|',('state','not in',('completed')),('expected_completed_difference','&lt;',0)]}"
+                                   readonly="1"/>
                             <field name="remarks"/>
 
                         </group>
@@ -92,10 +119,10 @@
         <field name="priority" eval="100"/>
         <field name="arch" type="xml">
             <kanban class="o_kanban_mobile" default_group_by="state" default_order="date desc" archivable="false"
-                sample="1" quick_create="0">
+                    sample="1" quick_create="0">
                 <field name="state" default_order="state"/>
                 <progressbar field="state"
-                        colors='{"completed": "success", "in_progress": "warning", "cancelled": "secondary","hold":"info"}'/>
+                             colors='{"completed": "success", "in_progress": "warning", "cancelled": "secondary","hold":"info"}'/>
                 <templates>
                     <t t-name="kanban-box">
                         <div t-attf-class="oe_kanban_content oe_kanban_global_click">
@@ -108,15 +135,18 @@
                             </div>
                             <div class="o_kanban_record_body">
                                 <span>
-                                    <b>Date : </b><field name="date"/>
+                                    <b>Date :</b>
+                                    <field name="date"/>
                                     <br/>
                                 </span>
                                 <span>
-                                    <b>Days Taken: </b><field name="time_taken_days"/>
+                                    <b>Days Taken:</b>
+                                    <field name="time_taken_days"/>
                                     <br/>
                                 </span>
                                 <span>
-                                    <b>Time Taken: </b><field name="total_time" widget="float_time"/>
+                                    <b>Time Taken:</b>
+                                    <field name="total_time" widget="float_time"/>
                                     <br/>
                                 </span>
 
@@ -124,7 +154,7 @@
 
                             <div class="o_kanban_record_bottom" t-if="!selection_mode">
 
-                                <div class="oe_kanban_bottom_right" t-if="!selection_mode">                        '
+                                <div class="oe_kanban_bottom_right" t-if="!selection_mode">'
                                     <field name="task_creator" widget="many2one_avatar_user"/>
                                 </div>
                             </div>
@@ -141,8 +171,10 @@
         <field name="arch" type="xml">
             <search>
                 <field name="expected_completed_difference"/>
-                <filter string="On Time" name="on_time" domain="[('state','=','completed'),('expected_completed_difference','&lt;=',0)]"/>
-                <filter string="Delayed" name="delayed" domain="[('state','=','completed'),('expected_completed_difference','>',0)]"/>
+                <filter string="On Time" name="on_time"
+                        domain="[('state','=','completed'),('expected_completed_difference','&lt;=',0)]"/>
+                <filter string="Delayed" name="delayed"
+                        domain="[('state','=','completed'),('expected_completed_difference','>',0)]"/>
 
             </search>
         </field>
@@ -168,10 +200,10 @@
     </record>
 
     <menuitem id="menu_other_works"
-        name="Miscellaneous Works"
-        action="other_task_action"
-        web_icon="logic_miscellaneous/static/description/icon.png"
-        sequence="10"/>
+              name="Miscellaneous Works"
+              action="other_task_action"
+              web_icon="logic_miscellaneous/static/description/icon.png"
+              sequence="10"/>
 
 
     <record model="ir.actions.server" id="change_one_time_status_misc">

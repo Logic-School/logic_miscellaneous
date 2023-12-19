@@ -10,7 +10,12 @@ class OtherTask(models.Model):
 
     name = fields.Char(string="Name", required=True)
     description = fields.Text(string="Description")
+
     date = fields.Date(string="Date", default=lambda self: fields.Date.context_today(self))
+
+    date = fields.Date(string="Date", default=date.today())
+    tags_id = fields.Many2many('project.tags', string="Tags")
+
 
     def _compute_manager_id(self):
         for record in self: 
