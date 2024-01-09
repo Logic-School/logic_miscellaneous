@@ -19,7 +19,8 @@ class OtherTask(models.Model):
     task_types = fields.Selection(selection=[('meeting', 'Meeting'), ('telephone_discussion', 'Telephone Discussion'),
                                              ('clerical_works', 'Clerical Works'),
                                              ('day_to_day_works', 'Day To Day Works'),
-                                             ('batch_related_works', 'Batch Related Works')], string="Task Type",
+                                             ('batch_related_works', 'Batch Related Works'),
+                                             ('other', 'Other')], string="Task Type",
                                   required=1)
     meeting_type = fields.Selection(selection=[('internal', 'Internal'), ('external', 'External')],
                                     string="Meeting Type")
@@ -49,6 +50,7 @@ class OtherTask(models.Model):
         selection=[('attendance', 'Attendance'), ('clear_scheduling', 'Clear Scheduling'),
                    ('communication', 'Communication')], string="Work Type"
     )
+    batch_id = fields.Many2one('logic.base.batch', string="Batch")
 
     def _compute_manager_id(self):
         for record in self:
