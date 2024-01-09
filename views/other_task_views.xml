@@ -63,6 +63,19 @@
                     <group>
                         <group>
                             <field name="department"/>
+                            <field name="task_types"/>
+                            <field name="meeting" attrs="{'invisible':[('task_types','!=','meeting')]}"/>
+                            <field name="meeting_type" attrs="{'invisible':['|',('task_types','!=','meeting'), ('task_types','!=','meeting')]}"/>
+                            <field name="meeting_ids" attrs="{'invisible':['|',('meeting_type','!=','internal'), ('task_types','!=','meeting')]}" widget="many2many_tags"/>
+                            <field name="meeting_with" attrs="{'invisible':[('meeting_type','!=','external')]}"/>
+                            <field name="discussion_type" attrs="{'invisible':[('task_types','!=','telephone_discussion')]}"/>
+                            <field name="discussion_with" attrs="{'invisible':['|',('task_types','!=','telephone_discussion'), ('discussion_type','!=','external')]}"/>
+                            <field name="discussion_ids" attrs="{'invisible':['|',('discussion_type','!=','internal'), ('task_types','!=','telephone_discussion')]}" widget="many2many_tags"/>
+                            <field name="discussion_duration" attrs="{'invisible':[('task_types','!=','telephone_discussion')]}"/>
+
+                            <field name="clerical_work_type" attrs="{'invisible':[('task_types','!=','clerical_works')]}" placeholder="clerical work type"/>
+                            <field name="day_to_day_work_type" attrs="{'invisible':[('task_types','!=','day_to_day_works')]}" placeholder="day to day work type"/>
+                            <field name="batch_related_work_type" attrs="{'invisible':[('task_types','!=','batch_related_works')]}" placeholder="batch related work type"/>
                             <field name="date"/>
                             <field name="tags_id" widget="many2many_tags"/>
                             <field name="description"/>
