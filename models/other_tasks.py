@@ -8,6 +8,7 @@ class OtherTask(models.Model):
     _name = "logic.task.other"
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = "Miscellaneous Task"
+    _order = 'id desc'
 
     name = fields.Char(string="Name", required=True)
     description = fields.Text(string="Description")
@@ -186,6 +187,38 @@ class OtherTask(models.Model):
             record.is_hr_manager = self.env.user.has_group('logic_miscellaneous.group_logic_other_task_hr_manager')
 
     is_hr_manager = fields.Boolean(compute="_compute_is_hr_manager")
+    badge = fields.Selection([('bronze', 'Bronze'), ('silver', 'Silver'), ('gold', 'Gold')], string="Badge")
+
+    def action_add_to_achievement(self):
+        self.env['logic.achievements'].sudo().create({
+            'misc_id': self.id,
+            'name': self.name,
+            'department_id': self.department.id,
+            'task_types': self.task_types,
+            'date': self.date,
+            'tags_id': self.tags_id.ids,
+            'description': self.description,
+            'owner_id': self.task_creator.id,
+            'manager_id': self.manager.id,
+            'expected_completion': self.expected_completion,
+            'completed_on': self.completion_datetime,
+            'time_difference': self.expected_completed_difference,
+            'expected_completed_status': self.expected_completed_status,
+            'remarks': self.remarks,
+            'meeting': self.meeting,
+            'meeting_type': self.meeting_type,
+            'discussion_type': self.discussion_type,
+            'discussion_duration': self.discussion_duration,
+            'clerical_work_type': self.clerical_work_type,
+            'day_to_day_work_type': self.day_to_day_work_type,
+            'batch_related_work_type': self.batch_related_work_type,
+            'batch_id': self.batch_id.id,
+
+        })
+        print("add to achievement")
+        self.added_achievement = True
+
+    added_achievement = fields.Boolean(default=False)
 
     @api.onchange('expected_completion')
     def on_expected_completion(self):
