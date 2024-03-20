@@ -48,7 +48,7 @@ class OtherTask(models.Model):
 
     # batch related works
     batch_related_work_type = fields.Selection(
-        selection=[('attendance', 'Attendance'), ('clear_scheduling', 'Clear Scheduling'),
+        selection=[('attendance', 'Attendance'), ('class_scheduling', 'Class Scheduling'),
                    ('communication', 'Communication')], string="Work Type"
     )
     batch_id = fields.Many2one('logic.base.batch', string="Batch")
