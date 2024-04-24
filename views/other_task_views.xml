@@ -57,7 +57,7 @@
                             help="Click here to add to achievement"
                             type="object" class="oe_highlight"
                             attrs="{'invisible':['|','|',('state','!=','completed'), ('added_achievement','!=',False), ('is_creator_head','=',False)]}"/>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,completed,hold"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,completed,hold,achievement"/>
                 </header>
                 <sheet>
                     <div class="oe_title">

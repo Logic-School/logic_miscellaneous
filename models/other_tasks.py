@@ -64,7 +64,7 @@ class OtherTask(models.Model):
                                             string="Task Creator Employee", readonly=True)
     state = fields.Selection(
         selection=[('draft', 'Draft'), ('in_progress', 'In Progress'), ('hold', 'On Hold'), ('completed', 'Completed'),
-                   ('cancel', 'Cancelled')])
+                   ('cancel', 'Cancelled'), ('achievement', 'Achievement')], )
     total_time = fields.Float(string="Time Taken")
     time_taken_days = fields.Integer(string="Days Taken")
     expected_days = fields.Integer(string="Expected Days")
@@ -217,6 +217,7 @@ class OtherTask(models.Model):
         })
         print("add to achievement")
         self.added_achievement = True
+        self.state = 'achievement'
 
     added_achievement = fields.Boolean(default=False)
 
