@@ -128,6 +128,13 @@ class OtherTask(models.Model):
 
     @api.depends('completion_datetime', 'expected_completion')
     def _compute_expected_completed_difference(self):
+        heads = self.env['hr.department'].sudo().search([])
+        head = []
+        for i in heads:
+            if i.manager_id:
+                print(i.manager_id.name,'manager')
+                head.append(i.manager_id.user_id.id)
+
         logger = logging.getLogger("Debugger: ")
         for record in self:
             record.expected_completed_status = False
@@ -136,31 +143,33 @@ class OtherTask(models.Model):
             # expected_time = record.expected_days + (record.expected_time/24)
             # taken_time = record.time_taken_days  + (record.total_time/24)
             if record.completion_datetime and record.expected_completion:
-
-                if record.completion_datetime > record.expected_completion:
-                    difference = record.completion_datetime - record.expected_completion
+                if self.env.user.id in head:
+                    record.expected_completed_status = ''
                 else:
-                    difference = record.expected_completion - record.completion_datetime
+                    if record.completion_datetime > record.expected_completion:
+                        difference = record.completion_datetime - record.expected_completion
+                    else:
+                        difference = record.expected_completion - record.completion_datetime
 
-                days_difference, hours_difference, minutes_difference = abs(difference.days), abs(
-                    difference.seconds // 3600), abs(difference.seconds // 60 % 60)
-                record.expected_completed_difference = days_difference + (hours_difference / 24) + (
-                        minutes_difference / 1440)
-                logger.error("days:" + str(days_difference) + " hrs: " + str(hours_difference) + "mins: " + str(
-                    minutes_difference))
-                if record.completion_datetime > record.expected_completion:
-                    record.expected_completed_status = "Delayed by " + str(days_difference) + " Days, " + str(
-                        hours_difference) + " Hours, and " + str(minutes_difference) + " Minutes"
-                    record.expected_completed_difference = abs(record.expected_completed_difference)
+                    days_difference, hours_difference, minutes_difference = abs(difference.days), abs(
+                        difference.seconds // 3600), abs(difference.seconds // 60 % 60)
+                    record.expected_completed_difference = days_difference + (hours_difference / 24) + (
+                            minutes_difference / 1440)
+                    logger.error("days:" + str(days_difference) + " hrs: " + str(hours_difference) + "mins: " + str(
+                        minutes_difference))
+                    if record.completion_datetime > record.expected_completion:
+                        record.expected_completed_status = "Delayed by " + str(days_difference) + " Days, " + str(
+                            hours_difference) + " Hours, and " + str(minutes_difference) + " Minutes"
+                        record.expected_completed_difference = abs(record.expected_completed_difference)
 
-                elif record.completion_datetime < record.expected_completion:
-                    record.expected_completed_status = "Ahead of schedule by " + str(
-                        abs(days_difference)) + " Days, " + str(abs(hours_difference)) + " Hours, and " + str(
-                        abs(minutes_difference)) + " Minutes"
-                    record.expected_completed_difference = - abs(record.expected_completed_difference)
+                    elif record.completion_datetime < record.expected_completion:
+                        record.expected_completed_status = "Ahead of schedule by " + str(
+                            abs(days_difference)) + " Days, " + str(abs(hours_difference)) + " Hours, and " + str(
+                            abs(minutes_difference)) + " Minutes"
+                        record.expected_completed_difference = - abs(record.expected_completed_difference)
 
-                else:
-                    record.expected_completed_status = "Completed exactly on expected time"
+                    else:
+                        record.expected_completed_status = "Completed exactly on expected time"
             else:
                 record.expected_completed_status = ''
 
