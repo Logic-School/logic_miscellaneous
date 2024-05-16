@@ -307,6 +307,13 @@ class OtherTask(models.Model):
         self.state = "completed"
         self.date_completed = fields.Date.context_today(self)
         self.completion_datetime = (fields.Datetime.now()).replace(second=0, microsecond=0)
+        return {
+            'effect': {
+                'fadeout': 'slow',
+                'message': 'Completed',
+                'type': 'rainbow_man',
+            }
+        }
 
     def action_ask_head(self):
         return {

@@ -60,6 +60,8 @@
                     <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,completed,hold,achievement"/>
                 </header>
                 <sheet>
+                    <widget name="web_ribbon" title="Completed" bg_color="bg-success"
+                            attrs="{'invisible': [('state', '!=', 'completed')]}"/>
                     <div class="oe_title">
                         <h1 class="d-flex">
                             <field name="name" placeholder="Task Name"/>
