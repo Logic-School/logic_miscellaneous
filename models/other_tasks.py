@@ -266,14 +266,14 @@ class OtherTask(models.Model):
         tasks = self.env['logic.task.other'].sudo().search(
             [('state', '=', 'completed'), ('expected_completion', '!=', False), ('completion_datetime', '!=', False),
              ('delayed_activity_send', '=', False)])
-        for task in tasks:
-            if task.expected_completion < task.completion_datetime:
-                task.activity_schedule('logic_miscellaneous.mail_activity_type_misc_task_delayed',
-                                       user_id=task.task_creator.employee_id.parent_id.user_id.id,
-                                       summary=f'To Approve: Delayed Task by {task.task_creator.name}')
-                task.write({
-                    'delayed_activity_send': True
-                })
+        # for task in tasks:
+        #     if task.expected_completion < task.completion_datetime:
+        #         task.activity_schedule('logic_miscellaneous.mail_activity_type_misc_task_delayed',
+        #                                user_id=task.task_creator.employee_id.parent_id.user_id.id,
+        #                                summary=f'To Approve: Delayed Task by {task.task_creator.name}')
+        #         task.write({
+        #             'delayed_activity_send': True
+        #         })
 
     def action_approve_delay(self):
         delayed_activity = self.activity_ids.filtered(
